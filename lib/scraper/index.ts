@@ -9,20 +9,20 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 async function getBrowser() {
-  if (process.env.VERCEL_ENV === "production") {
-    const executablePath = await chromium.executablePath();
+  // if (process.env.VERCEL_ENV === "production") {
+  //   const executablePath = await chromium.executablePath();
 
-    const browser = await puppeteerCore.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath,
-      headless: chromium.headless,
-    });
-    return browser;
-  } else {
-    const browser = await puppeteer.launch();
-    return browser;
-  }
+  //   const browser = await puppeteerCore.launch({
+  //     args: chromium.args,
+  //     defaultViewport: chromium.defaultViewport,
+  //     executablePath,
+  //     headless: chromium.headless,
+  //   });
+  //   return browser;
+  // } else {
+  const browser = await puppeteer.launch();
+  return browser;
+  // }
 }
 
 export async function scrapeAmazonProduct(url: string) {
