@@ -3,63 +3,27 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { extractCurrency, extractDescription, extractPrice } from "../utils";
-import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium-min";
-
-// export const dynamic = "force-dynamic";
-// export const maxDuration = 60;
-
-async function getBrowser() {
-  // if (process.env.VERCEL_ENV === "production") {
-  const executablePath = await chromium.executablePath();
-
-  const browser = await puppeteer.launch({
-    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(
-      `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
-    ),
-    headless: chromium.headless ? true : false,
-    ignoreHTTPSErrors: true,
-  });
-  return browser;
-  // } else {
-  //   const browser = await puppeteer.launch();
-  //   return browser;
-  // }
-}
 
 export async function scrapeAmazonProduct(url: string) {
   if (!url) return;
 
-  // const options = {
-  //   proxy: {
-  //     host: "proxy-server.scraperapi.com",
-  //     port: 8001,
-  //     auth: {
-  //       username: "scraperapi.device_type=desktop",
-  //       password: "",
-  //     },
-  //     protocol: "http",
-  //   },
-  // };
+  const options = {
+    proxy: {
+      host: "proxy-server.scraperapi.com",
+      port: 8001,
+      auth: {
+        username: "scraperapi.device_type=desktop",
+        password: process.env.SCRAPER_API_KEY!,
+      },
+      protocol: "http",
+    },
+  };
 
   try {
-    const browser = await getBrowser();
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2" });
-    const content = await page.content();
-
-    await browser.close();
-
-    const $ = cheerio.load(content);
-
     // Fetch the product page
-    // const response = await axios.get(url);
+    const response = await axios.get(url, options);
 
-    // console.log("data ==> ", response.data);
-
-    // const $ = cheerio.load(response.data);
+    const $ = cheerio.load(response.data);
 
     // Extract the product title
     const title =
