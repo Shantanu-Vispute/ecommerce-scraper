@@ -1,11 +1,12 @@
-"use server";
-
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { extractCurrency, extractDescription, extractPrice } from "../utils";
 import puppeteerCore from "puppeteer-core";
 import puppeteer from "puppeteer";
 import chromium from "@sparticuz/chromium";
+
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 async function getBrowser() {
   if (process.env.VERCEL_ENV === "production") {
