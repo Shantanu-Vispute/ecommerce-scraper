@@ -70,7 +70,7 @@ export async function scrapeAmazonProduct(url: string) {
     let currency;
     let discountRate;
     let stars;
-    let reviewsCount;
+    let reviewsCount: any;
     let description;
 
     if (url.includes("amazon")) {
@@ -109,7 +109,7 @@ export async function scrapeAmazonProduct(url: string) {
         .replace(/,/g, "");
 
       description = extractDescription($);
-    } else if (url.includes("flipkart")) {
+    } else {
       currency = "₹";
 
       currentPrice = $(".Nx9bqj.CxhGGd")
@@ -153,9 +153,8 @@ export async function scrapeAmazonProduct(url: string) {
         .replace(/[^0-9.]/g, "");
 
       description = title;
-
-      console.log(images);
     }
+
     // Construct data object with scraped information
     const data = {
       url,
@@ -168,7 +167,7 @@ export async function scrapeAmazonProduct(url: string) {
       priceHistory: [],
       discountRate: Number(discountRate),
       category: "category",
-      reviewsCount: reviewsCount || 0,
+      reviewsCount: Number(reviewsCount) || 0,
       isOutOfStock: outOfStock,
       description,
       lowestPrice: Number(currentPrice) || Number(originalPrice),
